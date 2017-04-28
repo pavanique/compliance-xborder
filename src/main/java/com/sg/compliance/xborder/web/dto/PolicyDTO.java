@@ -10,6 +10,7 @@ public class PolicyDTO {
     private Long id;
     private Long policyId;
     private String policyName;
+    private String category;
     private String version;
     private boolean active;
 }

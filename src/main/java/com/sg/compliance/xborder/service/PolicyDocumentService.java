@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by narisp on 4/27/17.
  */
 @Component
-public class XBorderDocumentService {
+public class PolicyDocumentService {
     @Autowired
     private CountryRepository countryRepository;
 

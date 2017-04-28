@@ -34,4 +34,19 @@ public class PolicyTransformer {
         policyDTO.setActive(policy.isActive());
         return policyDTO;
     }
+
+    public static Policy toDomain(PolicyDTO policyDTO) {
+        if(policyDTO ==null){
+            return null;
+        }
+
+        Policy policy = new Policy();
+        policy.setPolicyId(policyDTO.getPolicyId());
+        policy.setCategory(policyDTO.getCategory());
+        policy.setActive(policyDTO.isActive());
+        policy.setPolicyName(policyDTO.getPolicyName());
+        policy.setVersion(policyDTO.getVersion());
+        return policy;
+    }
+
 }

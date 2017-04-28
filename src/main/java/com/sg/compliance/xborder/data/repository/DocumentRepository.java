@@ -3,6 +3,7 @@ package com.sg.compliance.xborder.data.repository;
 import com.sg.compliance.xborder.data.object.Policy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by narisp on 4/27/17.
  */
-public interface DocumentRepository extends Repository<Policy, Long> {
+public interface DocumentRepository extends CrudRepository<Policy, Long> {
 
     List<Policy> findAll(Pageable pageable);
 
@@ -19,4 +20,7 @@ public interface DocumentRepository extends Repository<Policy, Long> {
 
     @Query("select p from Policy p where p.policyId=?1 and p.active='true'")
     Policy findActivePolicyByPolicyId(Long policyId);
+
+    @Query("select max(p.policyId) from Policy p")
+    Long findMaxPolicyId();
 }

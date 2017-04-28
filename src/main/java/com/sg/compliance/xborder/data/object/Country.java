@@ -3,6 +3,7 @@ package com.sg.compliance.xborder.data.object;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +17,13 @@ public class Country {
     private long id;
     private String countryISO;
     private String countryName;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "COUNTRY_POLICY",
             joinColumns = @JoinColumn(name = "COUNTRY_ID"),
             inverseJoinColumns = @JoinColumn(name = "POLICY_ID"))
-    private List<Policy> policies;
+    private List<Policy> policies = new ArrayList<>();
 
-    public void addPhone(Policy policy) {
+    public void addPolicy(Policy policy) {
         if (!getPolicies().contains(policy)){
             getPolicies().add(policy);
         }
