@@ -4,20 +4,22 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by narisp on 4/27/17.
  */
 @Data
 @Entity
-public class Policy implements Cloneable {
+public class Policy implements Cloneable, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "POLICY_ID")
     private Long policyId;
     private String policyName;
     private String category;
-    @Column(name = "policyDocument",
+    @Column(name = "policy_Document",
             columnDefinition = "CLOB NULL")
     @Lob
     private MultipartFile policyDocument;
