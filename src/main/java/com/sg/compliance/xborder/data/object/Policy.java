@@ -1,12 +1,9 @@
 package com.sg.compliance.xborder.data.object;
 
 import lombok.Data;
-import org.hibernate.Hibernate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.io.IOException;
-import java.sql.Blob;
 
 /**
  * Created by narisp on 4/27/17.
@@ -21,7 +18,7 @@ public class Policy implements Cloneable {
     private String policyName;
     private String category;
     @Column(name = "policyDocument",
-            columnDefinition = "CLOB NOT NULL")
+            columnDefinition = "CLOB NULL")
     @Lob
     private MultipartFile policyDocument;
     private String documentName;

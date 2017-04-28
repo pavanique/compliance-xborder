@@ -2,13 +2,12 @@ package com.sg.compliance.xborder.web.controller;
 
 import com.sg.compliance.xborder.service.CountryManagementService;
 import com.sg.compliance.xborder.web.dto.CountryDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.*;
 
 import static com.sg.compliance.xborder.web.transformer.CountryTransformer.toDomain;
 
@@ -17,13 +16,16 @@ import static com.sg.compliance.xborder.web.transformer.CountryTransformer.toDom
  */
 @Controller
 @RequestMapping("/admin/country")
+@Api(value = "/admin/country", description="Manage countries")
 public class CountryManagementController {
     @Autowired
     private CountryManagementService countryManagementService;
 
     @PostMapping("/{countryISO}")
     @ResponseBody
-    public void addCountry(@PathParam("countryISO") String countryISO, CountryDTO countryDTO) {
+    @ApiOperation(value="Add a new country")
+    public void addCountry(@ApiParam(value="country ISO", required = true) @PathVariable("countryISO") String countryISO,
+                           @RequestBody CountryDTO countryDTO) {
         if (countryISO == null || !countryISO.equals(countryDTO.getCountryISO())) {
             throw new IllegalArgumentException("Invalid data submitted");
         }

@@ -21,7 +21,7 @@ public class PolicyManagementService {
 
     @Transactional
     public void add(String countryISO, Policy policy) {
-        Country country = countryRepository.findByCountryISO(countryISO);
+        Country country = countryRepository.findByCountryISO("IN");
         if (country != null) {
             policy.setPolicyId(getNewPolicyId());
             documentRepository.save(policy);
