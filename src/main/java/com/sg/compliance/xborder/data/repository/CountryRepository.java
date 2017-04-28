@@ -19,6 +19,9 @@ public interface CountryRepository extends CrudRepository<Country, Long> {
     @Query("select p from Country country inner join country.policies p where p!=null and p.active = 'true' and country.countryISO=?1 order by p.policyId")
     List<Policy> findActivePoliciesByCountryISO(String countryISO);
 
+    @Query("select p from Country country inner join country.policies p where p!=null and p.active = 'true' and p.category=?2 and country.countryISO=?1 order by p.policyId")
+    List<Policy> findActivePoliciesByCountryISOAndCategory(String countryISO, String category);
+
     List<Country> findAll();
 
     @Query("select distinct p.category from Country country left join country.policies p " +

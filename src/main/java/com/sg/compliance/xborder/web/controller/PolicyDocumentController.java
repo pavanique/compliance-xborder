@@ -5,10 +5,7 @@ import com.sg.compliance.xborder.service.PolicyDocumentService;
 import com.sg.compliance.xborder.web.dto.PolicyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +24,8 @@ public class PolicyDocumentController {
 
     @GetMapping("/country/{countryISO}")
     @ResponseBody
-    public List<PolicyDTO> getPolicies(@PathVariable String countryISO) {
-        List<Policy> policies = this.policyDocumentService.getPoliciesByCountry(countryISO);
+    public List<PolicyDTO> getPolicies(@PathVariable String countryISO, @RequestParam(required = false) String category) {
+        List<Policy> policies = this.policyDocumentService.getPoliciesByCountry(countryISO, category);
         return toDTO(policies);
     }
 

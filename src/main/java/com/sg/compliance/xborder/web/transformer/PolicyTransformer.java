@@ -32,6 +32,7 @@ public class PolicyTransformer {
         policyDTO.setPolicyId(policy.getPolicyId());
         policyDTO.setPolicyName(policy.getPolicyName());
         policyDTO.setActive(policy.isActive());
+        policyDTO.setCategory(policy.getCategory());
         return policyDTO;
     }
 
