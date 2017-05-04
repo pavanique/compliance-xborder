@@ -22,28 +22,45 @@ import static com.sg.compliance.xborder.web.transformer.PolicyTransformer.toDoma
 @RequestMapping("/admin/policy")
 @Api("Policy management")
 public class PolicyManagementController {
-    @Autowired
-    private PolicyManagementService policyManagementService;
+	@Autowired
+	private PolicyManagementService policyManagementService;
 
-    @PostMapping(value = "/{countryISO}")
+	@PostMapping(value = "/{countryISO}")
+	@ResponseBody
+	@ApiOperation("Add a policy to the given country")
+	public PolicyDTO addPolicy(@ApiParam(required = true) @PathVariable("countryISO") String countryISO,
+			@RequestBody PolicyDTO policyDTO) {
+		Policy policy = toDomain(policyDTO);
+		// policy.setPolicyDocument(document);
+		policyManagementService.add(countryISO, policy);
+		return toDTO(policy);
+	}
+
+	@PostMapping(value="/document/{policyVersionId}")
     @ResponseBody
-    @ApiOperation("Add a policy to the given country")
-    public void addPolicy(@ApiParam(required = true) @PathVariable("countryISO") String countryISO,
-                          @RequestBody PolicyDTO policyDTO) {
-        Policy policy = toDomain(policyDTO);
-        //policy.setPolicyDocument(document);
-        policyManagementService.add(countryISO, policy);
+    @ApiOperation("Upload a policy document to the policy unique version country")
+    public String uploadPolicyDocument(@ApiParam(required=true) @PathVariable("policyVersionId") Long id,
+    		@RequestParam("file") MultipartFile, RedirectAttributes redirectAttributes){
+    if(file.isEmpty()){
+    	redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+    	return "redirect:uploadStatus";
+    }
+    policyManagementService.addPolicyDocument(id, file);
+    return "redirect:uploadStatus";
     }
 
-    @PostMapping(value = "/{countryISO}/policy/{policyId}")
-    @ResponseBody
-    public void copyPolicy(@ApiParam(required = true) @PathVariable("countryISO") String countryISO, @PathVariable("policyId") Long policyId) {
-        policyManagementService.copy(countryISO, policyId);
-    }
-/*
-,
-                          @ApiParam(required = true) @RequestPart MultipartFile document
-{"active": true,"category": "string","id": 0,"policyId": 0,"policyName": "string","version": "string"};Content-Type: application/json
-
- */
+	@PostMapping(value = "/{countryISO}/policy/{policyId}")
+	@ResponseBody
+	public void copyPolicy(@ApiParam(required = true) @PathVariable("countryISO") String countryISO,
+			@PathVariable("policyId") Long policyId) {
+		policyManagementService.copy(countryISO, policyId);
+	}
+	/*
+	 * ,
+	 * 
+	 * @ApiParam(required = true) @RequestPart MultipartFile document {"active":
+	 * true,"category": "string","id": 0,"policyId": 0,"policyName":
+	 * "string","version": "string"};Content-Type: application/json
+	 * 
+	 */
 }

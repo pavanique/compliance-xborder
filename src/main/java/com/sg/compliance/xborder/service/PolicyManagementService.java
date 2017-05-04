@@ -18,6 +18,10 @@ public class PolicyManagementService {
     private CountryRepository countryRepository;
     @Autowired
     private DocumentRepository documentRepository;
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
+    @Autowired
+    private PolicyFileRepo policyFileRepo;
 
     @Transactional
     public void add(String countryISO, Policy policy) {
@@ -46,8 +50,27 @@ public class PolicyManagementService {
         }
     }
 
+    @Transactional
+    public void addPolicyDocument(Long id, MultipartFile file){
+     policyFileRepo.saveFile(id, file);
+     Policy policy = documentRepository.findOne(id);
+     try{
+    	 EntityManager entityManager = entityManagerFactory.createEntityManager();
+    	 Session session = entityManager.unwrap(Session.class);
+    	 Blob blob = Hibernater.getLobCreator(session).createBlob(file.getBytes());
+    	 policy.setPolicyDocument(blob);
+     }catch(IOException io){
+    	io.printStackTrace(); 
+     }
+     policy.setDocumentType(file.getContentType());
+     policy.setDocumentName(file.getOriginalFileName());
+     documentRepository.save();
+    }
+    
     private long getNewPolicyId() {
         Long maxPolicyId = documentRepository.findMaxPolicyId();
         return maxPolicyId == null ? 1 : ++maxPolicyId;
     }
+    
+    
 }
