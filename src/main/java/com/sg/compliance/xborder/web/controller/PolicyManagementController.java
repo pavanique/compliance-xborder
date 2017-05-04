@@ -3,6 +3,8 @@ package com.sg.compliance.xborder.web.controller;
 import com.sg.compliance.xborder.data.object.Policy;
 import com.sg.compliance.xborder.service.PolicyManagementService;
 import com.sg.compliance.xborder.web.dto.PolicyDTO;
+import com.sg.compliance.xborder.web.transformer.PolicyTransformer;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static com.sg.compliance.xborder.web.transformer.PolicyTransformer.toDomain;
 
@@ -33,14 +36,14 @@ public class PolicyManagementController {
 		Policy policy = toDomain(policyDTO);
 		// policy.setPolicyDocument(document);
 		policyManagementService.add(countryISO, policy);
-		return toDTO(policy);
+		return PolicyTransformer.toDTO(policy);
 	}
 
 	@PostMapping(value="/document/{policyVersionId}")
     @ResponseBody
     @ApiOperation("Upload a policy document to the policy unique version country")
     public String uploadPolicyDocument(@ApiParam(required=true) @PathVariable("policyVersionId") Long id,
-    		@RequestParam("file") MultipartFile, RedirectAttributes redirectAttributes){
+    		@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
     if(file.isEmpty()){
     	redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
     	return "redirect:uploadStatus";

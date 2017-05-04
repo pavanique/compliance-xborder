@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Blob;
 
 /**
  * Created by narisp on 4/27/17.
@@ -22,7 +23,7 @@ public class Policy implements Cloneable, Serializable {
     @Column(name = "policy_Document",
             columnDefinition = "CLOB NULL")
     @Lob
-    private MultipartFile policyDocument;
+    private Blob policyDocument;
     private String documentName;
     private String documentType;
     private String version;

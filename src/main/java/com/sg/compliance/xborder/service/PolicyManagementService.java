@@ -4,9 +4,18 @@ import com.sg.compliance.xborder.data.object.Country;
 import com.sg.compliance.xborder.data.object.Policy;
 import com.sg.compliance.xborder.data.repository.CountryRepository;
 import com.sg.compliance.xborder.data.repository.DocumentRepository;
+
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 
 /**
@@ -57,14 +66,14 @@ public class PolicyManagementService {
      try{
     	 EntityManager entityManager = entityManagerFactory.createEntityManager();
     	 Session session = entityManager.unwrap(Session.class);
-    	 Blob blob = Hibernater.getLobCreator(session).createBlob(file.getBytes());
+    	 Blob blob = Hibernate.getLobCreator(session).createBlob(file.getBytes());
     	 policy.setPolicyDocument(blob);
      }catch(IOException io){
     	io.printStackTrace(); 
      }
      policy.setDocumentType(file.getContentType());
-     policy.setDocumentName(file.getOriginalFileName());
-     documentRepository.save();
+     policy.setDocumentName(file.getOriginalFilename());
+     documentRepository.save(policy);
     }
     
     private long getNewPolicyId() {
